@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:testing_app/first_page.dart';
 import 'package:testing_app/third_page.dart';
 
+import 'book_list.dart';
+
 class SecondPage extends StatelessWidget {
   SecondPage(this.name);
   final String name;
@@ -24,7 +26,8 @@ class SecondPage extends StatelessWidget {
               ),
             ),
             _buildButton(context, '前の画面へ', FirstPage()),
-            _buildButton(context, '次の画面へ', ThirdPage()),
+            _buildButton(context, 'Third 画面へ', ThirdPage()),
+            _buildButton(context, '本一覧へ', BookList()),
           ],
         ),
       ),
