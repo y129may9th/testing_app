@@ -5,6 +5,7 @@ import 'package:testing_app/add_book/add_book_page.dart';
 import 'package:testing_app/book_list/book_list_model.dart';
 import 'package:testing_app/domain/book.dart';
 import 'package:testing_app/edit_book/edit_book_page.dart';
+import 'package:testing_app/main.dart';
 
 class BookList extends StatelessWidget {
   @override
@@ -33,20 +34,22 @@ class BookList extends StatelessWidget {
                           SlidableAction(
                             flex: 1,
                             onPressed: (BuildContext context) async {
-                              final bool? added = await Navigator.push(
+                              ScaffoldMessengerState _scaffoldMessangerState =
+                                  scaffoldKey.currentState!;
+                              final String? title = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => EditBookPage(book),
                                 ),
                               );
 
-                              if (added != null && added) {
-                                final snackBar = SnackBar(
-                                  backgroundColor: Colors.green[200],
-                                  content: const Text('編集しました。'),
+                              if (title != null) {
+                                _scaffoldMessangerState.showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: Colors.green[200],
+                                    content: Text('$titleを編集しました。'),
+                                  ),
                                 );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
                               }
 
                               model.fetchBookList();
