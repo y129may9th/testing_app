@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:testing_app/add_book/add_book_page.dart';
 import 'package:testing_app/book_list/book_list_model.dart';
 import 'package:testing_app/domain/book.dart';
 
@@ -33,8 +34,16 @@ class BookList extends StatelessWidget {
             );
           }),
         ),
-        floatingActionButton: const FloatingActionButton(
-          onPressed: null,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddBookPage(),
+                fullscreenDialog: true,
+              ),
+            );
+          },
           tooltip: 'increment',
           child: Icon(Icons.add),
         ),
