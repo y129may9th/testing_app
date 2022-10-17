@@ -126,28 +126,36 @@ class BookList extends StatelessWidget {
           title: Text("削除の確認"),
           content: Text("『${book.title}』を削除しますか？"),
           actions: [
-            TextButton(
-              child: Text("いいえ"),
-              onPressed: () => Navigator.pop(context),
-            ),
-            TextButton(
-              child: Text("はい"),
-              onPressed: () async {
-                await model.deleteBook(book);
-                Navigator.pop(context);
-
-                ScaffoldMessengerState _scaffoldMessangerState =
-                    scaffoldKey.currentState!;
-
-                _scaffoldMessangerState.showSnackBar(
-                  SnackBar(
-                    backgroundColor: Colors.red[300],
-                    content: Text("『${book.title}』を削除しました"),
-                  ),
+            Builder(
+              builder: (context) {
+                return TextButton(
+                  child: Text("いいえ"),
+                  onPressed: () => Navigator.pop(context),
                 );
+              }
+            ),
+            Builder(
+              builder: (context) {
+                return TextButton(
+                  child: Text("はい"),
+                  onPressed: () async {
+                    await model.deleteBook(book);
+                    Navigator.pop(context);
 
-                model.fetchBookList();
-              },
+                    ScaffoldMessengerState _scaffoldMessangerState =
+                        scaffoldKey.currentState!;
+
+                    _scaffoldMessangerState.showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red[300],
+                        content: Text("『${book.title}』を削除しました"),
+                      ),
+                    );
+
+                    model.fetchBookList();
+                  },
+                );
+              }
             ),
           ],
         );
