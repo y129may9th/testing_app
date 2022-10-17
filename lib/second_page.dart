@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:testing_app/first_page.dart';
 import 'package:testing_app/third_page.dart';
 
-import 'book_list/book_list.dart';
+import 'book_list/book_list_page.dart';
 
 class SecondPage extends StatelessWidget {
   SecondPage(this.name);
