@@ -20,6 +20,7 @@ class EditBookPage extends StatelessWidget {
             return Column(
               children: [
                 TextField(
+                  controller: model.titleController,
                   decoration: const InputDecoration(
                     hintText: '本のタイトル',
                   ),
@@ -31,6 +32,7 @@ class EditBookPage extends StatelessWidget {
                   height: 8,
                 ),
                 TextField(
+                  controller: model.authorController,
                   decoration: const InputDecoration(
                     hintText: '著者',
                   ),
