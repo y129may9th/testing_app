@@ -25,7 +25,7 @@ class EditBookPage extends StatelessWidget {
                     hintText: '本のタイトル',
                   ),
                   onChanged: (text) {
-                    model.title = text;
+                    model.setAuthor(text);
                   },
                 ),
                 const SizedBox(
@@ -37,29 +37,32 @@ class EditBookPage extends StatelessWidget {
                     hintText: '著者',
                   ),
                   onChanged: (text) {
-                    model.author = text;
+                    model.setAuthor(text);
                   },
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      await model.updateBook();
-                      Navigator.of(context).pop(true);
-                    } catch (e) {
-                      final snackBar = SnackBar(
-                        backgroundColor: Colors.red[200],
-                        content: const Text('本のタイトルが入力されていません。'),
-                        action: SnackBarAction(
-                          textColor: Colors.black,
-                          label: 'Undo',
-                          onPressed: () {
-                            // Some code to undo the change.
-                          },
-                        ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
-                  },
+                  onPressed: model.isUpdated()
+                      ? () async {
+                          try {
+                            await model.updateBook();
+                            Navigator.of(context).pop(model.title);
+                          } catch (e) {
+                            final snackBar = SnackBar(
+                              backgroundColor: Colors.red[200],
+                              content: const Text('本のタイトルが入力されていません。'),
+                              action: SnackBarAction(
+                                textColor: Colors.black,
+                                label: 'Undo',
+                                onPressed: () {
+                                  // Some code to undo the change.
+                                },
+                              ),
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
+                        }
+                      : null, // null の時は、ボタンが非活性
                   child: const Text('更新する'),
                 )
               ],
