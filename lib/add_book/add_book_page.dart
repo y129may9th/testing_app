@@ -36,10 +36,26 @@ class AddBookPage extends StatelessWidget {
                   },
                 ),
                 ElevatedButton(
-                    onPressed: () {
-                      model.addBook();
-                    },
-                    child: Text('追加'))
+                  onPressed: () async {
+                    try {
+                      await model.addBook();
+                    } catch (e) {
+                      final snackBar = SnackBar(
+                        backgroundColor: Colors.red[200],
+                        content: const Text('本のタイトルが入力されていません。'),
+                        action: SnackBarAction(
+                          textColor: Colors.black,
+                          label: 'Undo',
+                          onPressed: () {
+                            // Some code to undo the change.
+                          },
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  },
+                  child: const Text('追加'),
+                )
               ],
             );
           }),

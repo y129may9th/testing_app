@@ -7,11 +7,11 @@ class AddBookModel extends ChangeNotifier {
   String? author;
 
   Future addBook() async {
-    if (title == null) {
+    if (title == null || title == '') {
       throw '本のタイトルが入力されていません。';
     }
 
-    if (author == null) {
+    if (author == null || author!.isEmpty) {
       throw '著者が入力されていません。';
     }
 
