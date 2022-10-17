@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:testing_app/add_book/add_book_model.dart';
-import 'package:testing_app/domain/book.dart';
 
 class AddBookPage extends StatelessWidget {
   @override
