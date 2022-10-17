@@ -20,7 +20,6 @@ class FirstPage extends StatelessWidget {
               //     'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
               TextField(
                 onChanged: (text) {
-                  print(text); // debug
                   nameText = text;
                 },
                 // obscureText: true, // パスワードみたいに隠すかどうか

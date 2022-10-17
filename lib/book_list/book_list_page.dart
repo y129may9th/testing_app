@@ -14,8 +14,9 @@ class BookList extends StatelessWidget {
           title: const Text('本一覧'),
         ),
         body: Center(
-          child: Consumer<BookListModel>(builder: (context, model, child) {
-            final List<Book>? books = model.books;
+          child: Consumer<BookListModel>(
+            builder: (context, model, child) {
+              final List<Book>? books = model.books;
 
             if (books == null) {
               return CircularProgressIndicator();
@@ -54,7 +55,7 @@ class BookList extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
 
-              model.fetchBoookList();
+              model.fetchBookList();
             },
             tooltip: 'increment',
             child: Icon(Icons.add),

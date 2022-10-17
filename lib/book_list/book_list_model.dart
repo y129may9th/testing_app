@@ -6,14 +6,12 @@ import '../domain/book.dart';
 class BookListModel extends ChangeNotifier {
   List<Book>? books;
 
-  void fetchBoookList() async {
+  void fetchBookList() async {
     final QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection('books').get();
 
     final List<Book> books = snapshot.docs.map((DocumentSnapshot document) {
       Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-      print('passed');
-      print(data);
       final String title = data['title'];
       final String author = data['author'];
 
