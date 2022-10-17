@@ -39,6 +39,7 @@ class AddBookPage extends StatelessWidget {
                   onPressed: () async {
                     try {
                       await model.addBook();
+                      Navigator.of(context).pop(true);
                     } catch (e) {
                       final snackBar = SnackBar(
                         backgroundColor: Colors.red[200],
