@@ -60,8 +60,8 @@ class BookList extends StatelessWidget {
                             label: '編集',
                           ),
                           SlidableAction(
-                            onPressed: (BuildContext context) {
-                              // 削除
+                            onPressed: (BuildContext context) async {
+                              await showConfirmDialog(context, book, model);
                             }, // delete
                             backgroundColor: Color(0xFFFE4A49),
                             foregroundColor: Colors.white,
@@ -110,6 +110,56 @@ class BookList extends StatelessWidget {
           );
         }),
       ),
+    );
+  }
+
+  Future showConfirmDialog(
+    BuildContext context,
+    Book book,
+    BookListModel model,
+  ) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return AlertDialog(
+          title: Text("削除の確認"),
+          content: Text("『${book.title}』を削除しますか？"),
+          actions: [
+            Builder(
+              builder: (context) {
+                return TextButton(
+                  child: Text("いいえ"),
+                  onPressed: () => Navigator.pop(context),
+                );
+              }
+            ),
+            Builder(
+              builder: (context) {
+                return TextButton(
+                  child: Text("はい"),
+                  onPressed: () async {
+                    await model.deleteBook(book);
+                    Navigator.pop(context);
+
+                    ScaffoldMessengerState _scaffoldMessangerState =
+                        scaffoldKey.currentState!;
+
+                    _scaffoldMessangerState.showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red[300],
+                        content: Text("『${book.title}』を削除しました"),
+                      ),
+                    );
+
+                    model.fetchBookList();
+                  },
+                );
+              }
+            ),
+          ],
+        );
+      },
     );
   }
 }
