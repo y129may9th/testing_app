@@ -5,6 +5,7 @@ import 'package:testing_app/add_book/add_book_page.dart';
 import 'package:testing_app/book_list/book_list_model.dart';
 import 'package:testing_app/domain/book.dart';
 import 'package:testing_app/edit_book/edit_book_page.dart';
+import 'package:testing_app/login/login_page.dart';
 import 'package:testing_app/main.dart';
 
 class BookList extends StatelessWidget {
@@ -15,6 +16,21 @@ class BookList extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('本一覧'),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                //画面遷移
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                    fullscreenDialog: true,
+                  ),
+                );
+              },
+              icon: const Icon(Icons.person),
+            )
+          ],
         ),
         body: Center(
           child: Consumer<BookListModel>(
@@ -126,37 +142,33 @@ class BookList extends StatelessWidget {
           title: Text("削除の確認"),
           content: Text("『${book.title}』を削除しますか？"),
           actions: [
-            Builder(
-              builder: (context) {
-                return TextButton(
-                  child: Text("いいえ"),
-                  onPressed: () => Navigator.pop(context),
-                );
-              }
-            ),
-            Builder(
-              builder: (context) {
-                return TextButton(
-                  child: Text("はい"),
-                  onPressed: () async {
-                    await model.deleteBook(book);
-                    Navigator.pop(context);
+            Builder(builder: (context) {
+              return TextButton(
+                child: Text("いいえ"),
+                onPressed: () => Navigator.pop(context),
+              );
+            }),
+            Builder(builder: (context) {
+              return TextButton(
+                child: Text("はい"),
+                onPressed: () async {
+                  await model.deleteBook(book);
+                  Navigator.pop(context);
 
-                    ScaffoldMessengerState _scaffoldMessangerState =
-                        scaffoldKey.currentState!;
+                  ScaffoldMessengerState _scaffoldMessangerState =
+                      scaffoldKey.currentState!;
 
-                    _scaffoldMessangerState.showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red[300],
-                        content: Text("『${book.title}』を削除しました"),
-                      ),
-                    );
+                  _scaffoldMessangerState.showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.red[300],
+                      content: Text("『${book.title}』を削除しました"),
+                    ),
+                  );
 
-                    model.fetchBookList();
-                  },
-                );
-              }
-            ),
+                  model.fetchBookList();
+                },
+              );
+            }),
           ],
         );
       },
