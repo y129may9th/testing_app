@@ -14,63 +14,80 @@ class LoginPage extends StatelessWidget {
         ),
         body: Center(
           child: Consumer<LoginModel>(builder: (context, model, child) {
-            return Column(
+            return Stack(
               children: [
-                TextField(
-                  controller: model.emailController,
-                  decoration: const InputDecoration(
-                    hintText: 'Email',
-                  ),
-                  onChanged: (text) {
-                    model.setPassword(text);
-                  },
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                TextField(
-                  controller: model.passwordController,
-                  decoration: const InputDecoration(
-                    hintText: 'パスワード',
-                  ),
-                  onChanged: (text) {
-                    model.setEmail(text);
-                  },
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      await model.signIn();
-                      // Navigator.of(context).pop(model.title);
-                    } catch (e) {
-                      final snackBar = SnackBar(
-                        backgroundColor: Colors.red[200],
-                        content: const Text(''),
-                        action: SnackBarAction(
-                          textColor: Colors.black,
-                          label: 'Undo',
-                          onPressed: () {
-                            // Some code to undo the change.
-                          },
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: model.emailController,
+                        decoration: const InputDecoration(
+                          hintText: 'Email',
                         ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
-                  },
-                  child: const Text('ログイン'),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RegisterPage(),
-                        fullscreenDialog: true,
+                        onChanged: (text) {
+                          model.setPassword(text);
+                        },
                       ),
-                    );
-                  },
-                  child: const Text('新規登録の方はこちら'),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      TextField(
+                        controller: model.passwordController,
+                        decoration: const InputDecoration(
+                          hintText: 'パスワード',
+                        ),
+                        onChanged: (text) {
+                          model.setEmail(text);
+                        },
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          model.startLoading();
+                          try {
+                            await model.login();
+                            Navigator.of(context).pop();
+                          } catch (e) {
+                            final snackBar = SnackBar(
+                              backgroundColor: Colors.red[200],
+                              content: Text(e.toString()),
+                              action: SnackBarAction(
+                                textColor: Colors.black,
+                                label: 'Undo',
+                                onPressed: () {
+                                  // Some code to undo the change.
+                                },
+                              ),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          } finally {
+                            model.endLoading();
+                          }
+                        },
+                        child: const Text('ログイン'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RegisterPage(),
+                              fullscreenDialog: true,
+                            ),
+                          );
+                        },
+                        child: const Text('新規登録の方はこちら'),
+                      ),
+                    ],
+                  ),
                 ),
+                if (model.isLoading)
+                  Container(
+                    color: Colors.black54,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
               ],
             );
           }),

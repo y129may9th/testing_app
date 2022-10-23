@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginModel extends ChangeNotifier {
@@ -7,6 +8,18 @@ class LoginModel extends ChangeNotifier {
 
   String? email;
   String? password;
+
+  bool isLoading = false;
+
+  void startLoading() {
+    isLoading = true;
+    notifyListeners();
+  }
+
+  void endLoading() {
+    isLoading = false;
+    notifyListeners();
+  }
 
   void setEmail(String email) {
     this.email = email;
@@ -18,8 +31,20 @@ class LoginModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future signIn() async {
+  Future login() async {
     this.email = emailController.text;
     this.password = passwordController.text;
+
+    if (email != null && password != null) {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email!,
+        password: password!,
+      );
+
+      // 他の情報を追加するときに uid を使い回すとか
+      final currentUser = FirebaseAuth.instance.currentUser;
+      final uid = currentUser!.uid;
+      print(uid);
+    }
   }
 }
