@@ -25,7 +25,7 @@ class EditBookPage extends StatelessWidget {
                     hintText: '本のタイトル',
                   ),
                   onChanged: (text) {
-                    model.setAuthor(text);
+                    model.setTitle(text);
                   },
                 ),
                 const SizedBox(
