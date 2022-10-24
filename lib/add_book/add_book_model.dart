@@ -8,6 +8,17 @@ class AddBookModel extends ChangeNotifier {
   String? title; // ? は null 許容
   String? author;
   File? imageFile;
+  bool isLoading = false;
+
+  void startLoading() {
+    isLoading = true;
+    notifyListeners();
+  }
+
+  void endLoading() {
+    isLoading = false;
+    notifyListeners();
+  }
 
   final ImagePicker picker = ImagePicker();
 
