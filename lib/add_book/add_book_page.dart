@@ -13,49 +13,81 @@ class AddBookPage extends StatelessWidget {
         ),
         body: Center(
           child: Consumer<AddBookModel>(builder: (context, model, child) {
-            return Column(
+            return Stack(
               children: [
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: '本のタイトル',
-                  ),
-                  onChanged: (text) {
-                    model.title = text;
-                  },
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: '著者',
-                  ),
-                  onChanged: (text) {
-                    model.author = text;
-                  },
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      await model.addBook();
-                      Navigator.of(context).pop(true);
-                    } catch (e) {
-                      final snackBar = SnackBar(
-                        backgroundColor: Colors.red[200],
-                        content: const Text('本のタイトルが入力されていません。'),
-                        action: SnackBarAction(
-                          textColor: Colors.black,
-                          label: 'Undo',
-                          onPressed: () {
-                            // Some code to undo the change.
-                          },
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      GestureDetector(
+                        child: SizedBox(
+                          width: 100,
+                          height: 160,
+                          child: model.imageFile != null
+                              ? Image.file(model.imageFile!)
+                              : Container(
+                                  color: Colors.grey,
+                                ),
                         ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
-                  },
-                  child: const Text('追加'),
-                )
+                        onTap: () async {
+                          await model.imgFromGallery();
+                        },
+                      ),
+                      TextField(
+                        decoration: const InputDecoration(
+                          hintText: '本のタイトル',
+                        ),
+                        onChanged: (text) {
+                          model.title = text;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      TextField(
+                        decoration: const InputDecoration(
+                          hintText: '著者',
+                        ),
+                        onChanged: (text) {
+                          model.author = text;
+                        },
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          model.startLoading();
+                          try {
+                            await model.addBook();
+                            Navigator.of(context).pop(true);
+                          } catch (e) {
+                            final snackBar = SnackBar(
+                              backgroundColor: Colors.red[200],
+                              content: Text(e.toString()),
+                              action: SnackBarAction(
+                                textColor: Colors.black,
+                                label: 'Undo',
+                                onPressed: () {
+                                  // Some code to undo the change.
+                                },
+                              ),
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          } finally {
+                            model.endLoading();
+                          }
+                        },
+                        child: const Text('追加'),
+                      )
+                    ],
+                  ),
+                ),
+                if (model.isLoading)
+                  Container(
+                    color: Colors.black54,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
               ],
             );
           }),
