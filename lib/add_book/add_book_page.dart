@@ -28,7 +28,6 @@ class AddBookPage extends StatelessWidget {
                             ),
                     ),
                     onTap: () async {
-                      print('pass');
                       await model.imgFromGallery();
                     },
                   ),
@@ -59,7 +58,7 @@ class AddBookPage extends StatelessWidget {
                       } catch (e) {
                         final snackBar = SnackBar(
                           backgroundColor: Colors.red[200],
-                          content: const Text('本のタイトルが入力されていません。'),
+                          content: Text(e.toString()),
                           action: SnackBarAction(
                             textColor: Colors.black,
                             label: 'Undo',

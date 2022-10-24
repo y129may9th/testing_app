@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -19,14 +20,20 @@ class AddBookModel extends ChangeNotifier {
       throw '著者が入力されていません。';
     }
 
+    final doc = FirebaseFirestore.instance.collection('books').doc();
+
+    // Storage に追加
+    String? imgURL;
     if (imageFile != null) {
-      // Storage にアップロード
+      final task = await FirebaseStorage.instance
+          .ref("books/${doc.id}")
+          .putFile(imageFile!);
+
+      imgURL = await task.ref.getDownloadURL();
     }
 
-    await FirebaseFirestore.instance.collection('books').add({
-      'title': title,
-      'author': author,
-    });
+    // firestore に追加
+    await doc.set({'title': title, 'author': author, 'imgURL': imgURL});
   }
 
   Future imgFromGallery() async {
